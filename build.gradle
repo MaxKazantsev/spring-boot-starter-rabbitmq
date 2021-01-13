@@ -6,7 +6,11 @@ plugins {
 
 group = 'com.github.maxkazantsev'
 version = '1.0.0'
+
 sourceCompatibility = '11'
+[compileJava, compileTestJava]*.options*.encoding = "UTF-8"
+
+ext { springBootVersion = "2.4.1" }
 
 configurations {
     compileOnly {
@@ -16,6 +20,18 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+}
+
+jar {
+    enabled = true
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-logging"
 }
 
 dependencies {
