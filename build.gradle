@@ -4,6 +4,7 @@ plugins {
     id 'java'
 }
 
+apply plugin: 'java'
 apply plugin: "maven"
 
 group = 'com.github.maxkazantsev'
@@ -24,12 +25,27 @@ repositories {
     mavenCentral()
 }
 
-dependencyManagement {
-    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+task sourcesJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }
 
 jar {
     enabled = true
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
 }
 
 configurations {
